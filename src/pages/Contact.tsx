@@ -1,7 +1,35 @@
+import { FormEvent, useState } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const Contact = () => {
+  const [form, setForm] = useState({ name: '', phone: '', email: '', matter: '', message: '' });
+  const [status, setStatus] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const submitForm = async (event: FormEvent) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setStatus('');
+
+    const { error } = await supabase.from('enquiries').insert({
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim() || null,
+      matter: form.matter || null,
+      message: form.message.trim() || null,
+    });
+
+    if (error) {
+      setStatus('Something went wrong. Please call or WhatsApp the office directly.');
+    } else {
+      setStatus('Your consultation request has been received. We will get back to you soon.');
+      setForm({ name: '', phone: '', email: '', matter: '', message: '' });
+    }
+    setSubmitting(false);
+  };
+
   return (
     <div className="bg-ivory-100 min-h-screen pb-24">
       <section className="bg-navy-900 text-ivory-100 py-20">
@@ -24,17 +52,18 @@ const Contact = () => {
           <div className="lg:col-span-2">
             <div className="bg-white p-8 md:p-10 rounded shadow-sm border border-gold-500/20">
               <h3 className="text-2xl font-serif text-navy-900 mb-6">Request a Consultation</h3>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={submitForm}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label htmlFor="name" className="block text-sm font-medium text-navy-900 mb-2">Full Name</label><input type="text" id="name" className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="John Doe" /></div>
-                  <div><label htmlFor="phone" className="block text-sm font-medium text-navy-900 mb-2">Phone Number</label><input type="tel" id="phone" className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="+91 98765 43210" /></div>
+                  <div><label htmlFor="name" className="block text-sm font-medium text-navy-900 mb-2">Full Name</label><input required type="text" id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="John Doe" /></div>
+                  <div><label htmlFor="phone" className="block text-sm font-medium text-navy-900 mb-2">Phone Number</label><input required type="tel" id="phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="+91 98765 43210" /></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label htmlFor="email" className="block text-sm font-medium text-navy-900 mb-2">Email Address</label><input type="email" id="email" className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="john@example.com" /></div>
-                  <div><label htmlFor="matter" className="block text-sm font-medium text-navy-900 mb-2">Matter / Practice Area</label><select id="matter" className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100 text-gray-700"><option>Select an area...</option><option>Matrimonial & Family Matters</option><option>Will Drafting & Matters</option><option>High Court Matters</option><option>Civil Court Matters</option><option>Criminal Court Matters</option><option>District & Sessions Court</option><option>Other</option></select></div>
+                  <div><label htmlFor="email" className="block text-sm font-medium text-navy-900 mb-2">Email Address</label><input type="email" id="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100" placeholder="john@example.com" /></div>
+                  <div><label htmlFor="matter" className="block text-sm font-medium text-navy-900 mb-2">Matter / Practice Area</label><select id="matter" value={form.matter} onChange={(e) => setForm({ ...form, matter: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100 text-gray-700"><option value="">Select an area...</option><option>Matrimonial & Family Matters</option><option>Will Drafting & Matters</option><option>High Court Matters</option><option>Civil Court Matters</option><option>Criminal Court Matters</option><option>District & Sessions Court</option><option>Other</option></select></div>
                 </div>
-                <div><label htmlFor="message" className="block text-sm font-medium text-navy-900 mb-2">Message</label><textarea id="message" rows={5} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100 resize-none" placeholder="Briefly describe your legal situation..."></textarea></div>
-                <button type="button" className="w-full md:w-auto bg-navy-900 hover:bg-gold-500 text-ivory-100 hover:text-navy-900 px-8 py-3 rounded font-semibold transition-colors">Submit Request</button>
+                <div><label htmlFor="message" className="block text-sm font-medium text-navy-900 mb-2">Message</label><textarea id="message" rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded bg-ivory-100 resize-none" placeholder="Briefly describe your legal situation..."></textarea></div>
+                {status && <p className="text-sm text-navy-900 bg-ivory-100 border border-gold-500/20 rounded p-3">{status}</p>}
+                <button type="submit" disabled={submitting} className="w-full md:w-auto bg-navy-900 hover:bg-gold-500 text-ivory-100 hover:text-navy-900 px-8 py-3 rounded font-semibold transition-colors disabled:opacity-60">{submitting ? 'Submitting...' : 'Submit Request'}</button>
               </form>
             </div>
           </div>
