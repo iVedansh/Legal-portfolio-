@@ -31,13 +31,13 @@ const Home = () => {
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }} className="flex-1 w-full max-w-md">
             <div className="aspect-[3/4] bg-navy-800 rounded-sm border-2 border-gold-500/30 p-2 shadow-2xl relative">
               <img src="/portrait.jpg" alt="Advocate Vineet Kumar Misra" className="w-full h-full object-cover rounded-sm" />
-              <div className="absolute -bottom-6 -left-6 bg-gold-500 text-navy-900 px-6 py-4 rounded-sm font-serif shadow-lg"><div className="text-3xl font-bold">31+</div><div className="text-sm font-semibold tracking-wider uppercase">Years of Practice</div></div>
+              <div className="absolute -bottom-6 -left-6 bg-gold-500 text-navy-900 px-6 py-4 rounded-sm font-serif shadow-lg"><div className="text-3xl font-bold">30+</div><div className="text-sm font-semibold tracking-wider uppercase">Years of Practice</div></div>
             </div>
           </motion.div>
         </div>
       </section>
       <section className="bg-white border-y border-gray-200 py-8"><div className="container mx-auto px-6 max-w-6xl"><div className="flex flex-wrap justify-center gap-12 text-center text-navy-900 font-medium">
-        <div className="flex items-center gap-2"><Shield className="text-gold-500" size={24} /> 31 Years of Practice</div>
+        <div className="flex items-center gap-2"><Shield className="text-gold-500" size={24} /> 30+ Years of Practice</div>
         <div className="flex items-center gap-2"><Building2 className="text-gold-500" size={24} /> LL.B., University of Lucknow</div>
         <div className="flex items-center gap-2"><Scale className="text-gold-500" size={24} /> High Court Practice</div>
         <div className="flex items-center gap-2"><Users className="text-gold-500" size={24} /> Lucknow-based</div>
