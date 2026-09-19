@@ -5,6 +5,7 @@ import About from './pages/About';
 import PracticeAreas from './pages/PracticeAreas';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import ResetPassword from './pages/ResetPassword';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { t, i18n } = useTranslation();
@@ -47,6 +48,7 @@ function App() {
           <Route path="/practice-areas" element={<PracticeAreas />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin/*" element={<Admin />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
         </Routes>
       </Layout>
     </Router>
