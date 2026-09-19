@@ -21,6 +21,7 @@ const Admin = () => {
   const [user, setUser] = useState<any>(null);
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [checking, setChecking] = useState(true);
   const [message, setMessage] = useState('');
 
@@ -89,6 +90,25 @@ const Admin = () => {
     }
 
     setLoading(false);
+  };
+
+  const sendResetLink = async () => {
+    setResetting(true);
+    setMessage('');
+
+    const redirectTo = `${window.location.origin}/admin/reset-password`;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo,
+    });
+
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setMessage('If this email belongs to an account, a reset link has been sent. Check your inbox.');
+    }
+
+    setResetting(false);
   };
 
   const signOut = async () => {
@@ -167,6 +187,15 @@ const Admin = () => {
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
+
+          <button
+            type="button"
+            onClick={sendResetLink}
+            disabled={resetting || !email.trim()}
+            className="mt-4 w-full text-sm font-medium text-navy-900 underline underline-offset-4 hover:text-gold-600 disabled:opacity-50"
+          >
+            {resetting ? 'Sending reset link...' : 'Forgot password?'}
+          </button>
 
           {message && (
             <p className="mt-5 rounded-lg bg-red-50 p-3 text-sm text-red-700">{message}</p>
