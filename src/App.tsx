@@ -4,8 +4,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import PracticeAreas from './pages/PracticeAreas';
 import Contact from './pages/Contact';
-
-const Admin = () => <div className="p-8 text-center"><h1 className="text-4xl text-navy-900 mb-4">Admin Dashboard</h1></div>;
+import Admin from './pages/Admin';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { t, i18n } = useTranslation();
