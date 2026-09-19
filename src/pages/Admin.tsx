@@ -18,9 +18,12 @@ type Enquiry = {
 const Admin = () => {
   const [email, setEmail] = useState('vineetkumarmisra402@gmail.com');
   const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [user, setUser] = useState<any>(null);
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
   const [resetting, setResetting] = useState(false);
   const [checking, setChecking] = useState(true);
   const [message, setMessage] = useState('');
@@ -90,6 +93,50 @@ const Admin = () => {
     }
 
     setLoading(false);
+  };
+
+  const changePassword = async (event: FormEvent) => {
+    event.preventDefault();
+    setMessage('');
+
+    if (newPassword.length < 8) {
+      setMessage('New password must be at least 8 characters.');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setMessage('New passwords do not match.');
+      return;
+    }
+
+    setChangingPassword(true);
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      setMessage('Your admin session has expired. Please sign in again.');
+      setChangingPassword(false);
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke('change-admin-password', {
+      body: { password: newPassword },
+    });
+
+    if (error) {
+      setMessage(error.message);
+    } else if (data?.error) {
+      setMessage(data.error);
+    } else {
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setMessage('Password changed successfully. Please sign in again with your new password.');
+      await supabase.auth.signOut();
+      setUser(null);
+      setEnquiries([]);
+    }
+
+    setChangingPassword(false);
   };
 
   const sendResetLink = async () => {
@@ -228,6 +275,41 @@ const Admin = () => {
               <LogOut className="h-4 w-4" /> Sign out
             </button>
           </div>
+        </div>
+
+        <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm border border-navy-900/10">
+          <h2 className="font-serif text-2xl text-navy-900">Change Password</h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Change your admin login password without sending a reset email.
+          </p>
+
+          <form onSubmit={changePassword} className="mt-5 grid gap-4 md:grid-cols-2">
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              minLength={8}
+              required
+              placeholder="New password"
+              className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gold-500"
+            />
+            <input
+              type="password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              minLength={8}
+              required
+              placeholder="Confirm new password"
+              className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gold-500"
+            />
+            <button
+              type="submit"
+              disabled={changingPassword}
+              className="rounded-lg bg-navy-900 px-4 py-3 font-medium text-white transition hover:bg-navy-800 disabled:opacity-60 md:col-span-2"
+            >
+              {changingPassword ? 'Changing password...' : 'Change Password'}
+            </button>
+          </form>
         </div>
 
         {message && (
