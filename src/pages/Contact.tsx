@@ -22,7 +22,8 @@ const Contact = () => {
     });
 
     if (error) {
-      setStatus('Something went wrong. Please call or WhatsApp the office directly.');
+      console.error('Consultation request failed:', error);
+      setStatus(`Submission failed: ${error.message}`);
     } else {
       setStatus('Your consultation request has been received. We will get back to you soon.');
       setForm({ name: '', phone: '', email: '', matter: '', message: '' });
