@@ -68,8 +68,15 @@ const Admin = () => {
   useEffect(() => {
     checkAdmin();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
-      checkAdmin();
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      // Keep this callback synchronous. Supabase warns that awaiting auth/API
+      // calls inside onAuthStateChange can deadlock the client.
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setEnquiries([]);
+      } else if (session?.user) {
+        setUser(session.user);
+      }
     });
 
     return () => listener.subscription.unsubscribe();
