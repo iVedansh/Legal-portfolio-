@@ -19,6 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <Link to="/about" className="hover:text-gold-500 transition-colors">{t('about')}</Link>
           <Link to="/practice-areas" className="hover:text-gold-500 transition-colors">{t('practiceAreas')}</Link>
           <Link to="/contact" className="hover:text-gold-500 transition-colors">{t('contact')}</Link>
+          <Link to="/admin" className="hover:text-gold-500 transition-colors">{t('admin')}</Link>
           <button onClick={toggleLanguage} className="ml-4 px-3 py-1 border border-gold-500 rounded text-sm hover:bg-gold-500 hover:text-navy-900 transition-colors">
             {i18n.language === 'en' ? 'हिन्दी' : 'English'}
           </button>
