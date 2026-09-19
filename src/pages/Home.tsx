@@ -24,7 +24,7 @@ const Home = () => {
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-lg text-gray-300 max-w-xl mb-10 leading-relaxed">{t('heroSupport')}</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="flex flex-wrap gap-4">
               <a href="tel:9415467284" className="bg-gold-500 hover:bg-gold-600 text-navy-900 px-8 py-3 rounded font-semibold transition-colors flex items-center gap-2"><Phone size={20} /> {t('callNow')}</a>
-              <a href="https://wa.me/918795634699" target="_blank" rel="noreferrer" className="border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-navy-900 px-8 py-3 rounded font-semibold transition-colors flex items-center gap-2"><MessageCircle size={20} /> {t('whatsapp')}</a>
+              <a href="https://wa.me/919415467284" target="_blank" rel="noreferrer" className="border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-navy-900 px-8 py-3 rounded font-semibold transition-colors flex items-center gap-2"><MessageCircle size={20} /> {t('whatsapp')}</a>
               <Link to="/contact" className="border-b border-transparent hover:border-ivory-100 text-ivory-100 px-4 py-3 font-medium transition-all">{t('requestConsultation')}</Link>
             </motion.div>
           </div>
